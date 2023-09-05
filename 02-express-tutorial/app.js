@@ -1,15 +1,21 @@
 const express = require('express')
-const path = require('path')
 const app = express()
+let { people } = require('./data')
+const path = require('path')
 
-app.use(express.static('./public'))
+app.use(express.static('./methods-public'))
+app.use(express.urlencoded({ extended: false }))
 
-app.get('/', (req, res) => {
-    res.status(200).sendFile(path.resolve(__dirname, './navbar-app/index.html'))
+app.post('/login', (req, res) => {
+    res.send('POST request to the homepage')
 })
 
-app.all('*', (req, res) => {
-    res.status(404).send('<h1>resource not found</h1>')
+app.get('/', (req, res) => {
+    res.send('<h1>Home Page</h1><a href="/api/people">people</a>')
+})
+
+app.get('/api/people', (req, res) => {
+    res.status(200).json({ success: true, data: people })
 })
 
 app.listen(5000, () => {
